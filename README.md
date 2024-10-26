@@ -165,7 +165,7 @@ The test results are output to `target/surefire-reports`.
 **1. Clone the Repository**:
 ```bash
 git clone https://github.com/DinakarAk/CustomerRewardCalculator.git
-cd CustomerRewardCalculator
+cd CustomerRewardCalculator-main
 ```
 **2. Build the project if maven installed in your local**:
 ```bash
