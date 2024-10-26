@@ -1,9 +1,10 @@
 name: Java CI
 
-
 on:
   push:
-    branches: ["main"]
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
 
 jobs:
   build:
@@ -32,7 +33,7 @@ jobs:
 
       - name: Archive Test Results
         if: always()
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: test-results
           path: target/surefire-reports
