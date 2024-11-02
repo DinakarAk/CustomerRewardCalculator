@@ -8,6 +8,7 @@ This project is a Java based REST API built using spring boot to manage a retail
 - [Features](#features)
 - [Flow Diagram](#flow-diagram)
   - [Component Diagram](#component-diagram-high-level)
+  - [Sequence Diagram](#sequential-diagram-low-level)
 - [Endpoints](#endpoints)
   - [Calculating Monthly rewards for Customer](#1-calculating-monthly-rewards-for-customer)
   - [Get Rewards Summary for Latest Three-month period](#2-get-rewards-summary-for-latest-three-month-period)
