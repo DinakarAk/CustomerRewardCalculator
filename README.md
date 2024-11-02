@@ -6,6 +6,8 @@ This project is a Java based REST API built using spring boot to manage a retail
 
 - [Overview](#overview)
 - [Features](#features)
+- [Flow Diagram](#flow-diagram)
+  - [Component Diagram](#component-diagram-high-level)
 - [Endpoints](#endpoints)
   - [Calculating Monthly rewards for Customer](#1-calculating-monthly-rewards-for-customer)
   - [Get Rewards Summary for Latest Three-month period](#2-get-rewards-summary-for-latest-three-month-period)
@@ -33,6 +35,39 @@ For Example:
 - **Calculating Monthly rewards for Customer**: Retrieves the monthly reward points for a specified customer.
 - **Get Rewards Summary for Latest Three-month period**: Provides a summary of rewards for each customer over the latest three month period specified by a start month.
 - **Calculate Reward for amount**: This provides the calculation of reward for the amount given.
+
+---
+
+## Flow Diagram
+
+### Component Diagram (High Level)
+
+
+![Component Diagram](src/main/resources/static/Component.svg)
+
+**Component Details**
+
+
+- **Client:** Sends HTTP requests to interact with the API. Requests include retrieving monthly rewards, getting rewards summaries, and calculating rewards for a specified period.
+- **RewardController:** Acts as an entry point for client requests and calls `RewardService` for business logic.
+- **RewardService:** Contains the core logic for calculating rewards and filtering transactions based on date.
+- **TransactionRepository:** Manages `Transaction` data and interacts with the H2 database.
+- **CustomerRepository:** Manages `Customer` data and interacts with the H2 Database.
+- **H2 Database:** An in-memory database that holds `Customer` and `Transaction` data, populated via `schema.sql` and `data.sql`.
+- **API service:** An asynchronous component that simulates external API calls for fetching data asynchronously.
+
+
+### Sequential Diagram (Low Level)
+
+![Sequence Diagram](src/main/resources/static/Sequence.svg)
+
+**Sequence Details**
+
+- **Client:** Initiates the request to get monthly rewards.
+- **RewardController:** The controller layer that handles incoming requests.
+- **RewardService:** The service layer where business logic for rewards calculation resides.
+- **TransactionRepository:** The repository responsible for retrieving transaction data.
+- **H2 Database:** The database that stores transaction and customer data.
 
 ---
 
@@ -131,10 +166,18 @@ The calculated reward for amount $90.0 is: 40
 
 ## Testing
 
+### Unit Testing
 Unit tests are written to ensure each functionality of API works as expected.
 -  Calculating Monthly rewards for Customer: Tests the monthly reward for the customer.
 -  Get Rewards Summary for Latest Three-month period: Tests rewards for each customer over the latest three month period specified by a start month
 -  Calculate Reward for amount: Tests the calculation of reward for the amount given.
+
+### Integration Testing
+- **Database Integration (H2):** Tests are run with an in-memory H2 database using `schema.sql` and `data.sql` to ensure that endpoints work as expected with real database queries.
+- **End to End Tests:** This verifies that the full flow from endpoint request to database access and response works as expected.
+
+### Asynchronous testing
+- **Async API Test:** This make sures that asynchronous calls to simulate external API fetches work as expected handling delays and returning correct data.
 
 ### Asynchronous API Call
 
