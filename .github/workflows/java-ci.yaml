@@ -28,6 +28,17 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-m2
 
+# added jar path to download from global maven repository.
+      - name: Download H2 Database Jar
+        run: |
+          wget https://repo1.maven.org/maven2/com/h2database/h2/1.4.200/h2-1.4.200.jar
+
+      - name: Start H2 Database Server
+        run: |
+          java -cp h2-1.4.200.jar org.h2.tools.Server -tcp -tcpAllowOthers -tcpPort 9092 -ifNotExists &
+
+        # this ampersand is used to run the server in background.
+
       - name: Build and Run Tests
         run: mvn clean install -DskipTests=false
 
