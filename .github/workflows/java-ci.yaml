@@ -39,6 +39,9 @@ jobs:
 
         # this ampersand is used to run the server in background.
 
+      - name: Set H2 Host for GitHub Actions
+        run: echo "H2_HOST=127.0.0.1" >> $GITHUB_ENV
+
       - name: Verify H2 Server is Running
         run: |
           sleep 5
