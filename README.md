@@ -255,6 +255,53 @@ INSERT INTO Transaction (customer_id, amount, transaction_date) VALUES (2, 60.00
 
 ```
 
+### Configuring DB to run on server mode
+
+To set up and run the H2 DB server on a custom port, I followed these steps:
+
+1. **Start the H2 Server in Server mode with custom port:**
+   - Check the H2 DB jar in `.m2/repository/com/h2database/h2/<version>/_.jar`
+   - Open the terminal and perform this command
+   ```bash
+     java -cp path/to/h2-version.jar org.h2.tools.Server -tcp -tcpAllowOthers -tcpPort 9092 -ifNotExists
+   ```
+   - Replace `path/to/h2-version.jar` with your jar path.
+   - Here I am using 9092 as my port you can use any port you like to run.
+   - Once you run this command you should see a message confirming that TCP server is running. For example: `TCP server running at tcp://10.0.0.78:9092`
+
+2. **Configure Spring boot to connect to H2 Server:**
+   - In the `src/main/resources/application.properties` file configure spring boot to connect to this H2 instance in server mode:
+   ```properties
+    spring.h2.console.enabled=true
+    spring.h2.console.path=/h2-console
+
+    #Database settings
+    spring.datasource.url=jdbc:h2:tcp://10.0.0.78:9092/mem:testdb;DB_CLOSE_DELAY=-1;MODE=MySQL
+    spring.datasource.driverClassName=org.h2.Driver
+    spring.datasource.username=sa
+    spring.datasource.password=password
+    spring.datasource.initialization-mode=always
+    spring.jpa.hibernate.ddl-auto=update
+    spring.datasource.data=classpath:data.sql
+    spring.datasource.schema=classpath:schema.sql
+   ```
+### Terminology
+```text
+`-tcp`: this starts the H2 server in TCP mode which enables remote connections.
+`-tcpAllowOthers`: Allows remote clients to connect to the database.
+`-tcpPort 9092`: This specifies a custom port (9092) for the h2 server instead of the default 8082.
+`-ifNotExists`: this allows the creation of the database if it is not already exists. This is necessary for the in-memory databases as they don't persists between the sessions.
+
+In properties
+
+`mem:testdb`: this uses a in-memory database named testdb on the h2 server.
+`DB_CLOSE_DELAY=-1`: keeps the in-memory database open as long as the h2 database server is running.
+`MODE=MySQL`: this sets the SQL compatibility mode to MySQL for easier compatibility with the mySQL syntax.
+
+`spring.h2.console.enabled=true` and `spring.h2.console.path=/h2-console`: this enables the h2 console debugging accessible at /h2-console. 
+`spring.datasource.initialization-mode=always` and `spring.jpa.hibernate.ddl-auto=update`: this make sures that tables are created and updated automatically based on the entity definitions. 
+
+```
 ---
 ## Technology Stack
 
